@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Interativo de Filmes e Séries</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><a href="catalogo.html">FilmesFlix</a></h1>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="catalogo.html" class="active">Catálogo</a></li>
+                    <li><a href="sobre.html">Sobre a Equipe</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <section class="filters-section">
+            <h2>Filtrar e Buscar</h2>
+            <form class="filter-form">
+                <div class="form-group">
+                    <label for="search-input">Buscar Título:</label>
+                    <input type="text" id="search-input" placeholder="Ex: Duna, The Office...">
+                </div>
+                <div class="form-group">
+                    <label for="genre-select">Gênero:</label>
+                    <select id="genre-select">
+                        <option value="">Todos os Gêneros</option>
+                        <option value="acao">Ação</option>
+                        <option value="comedia">Comédia</option>
+                        <option value="drama">Drama</option>
+                        <option option="ficcao">Ficção Científica</option>
+                        <option value="fantasia" selected>Fantasia</option>
+                        <option value="terror">Terror</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Aplicar Filtros</button>
+            </form>
+        </section>
+
+        <section class="results-section">
+            <div class="loading-spinner-container hidden">
+            
+                <div class="loading-spinner"></div>
+                <p>Carregando títulos...</p>
+            </div>
+
+            <div class="error-message hidden">
+                <p>Ocorreu um erro ao carregar os dados. Tente novamente mais tarde.</p>
+            </div>
+
+            <div class="movie-grid">
+                
+                <article class="movie-card">
+                    <a href="detalhes.html" class="card-link">
+                        <img src="c:\Users\SAMSUNG\Downloads\835_grande.jpg" alt="Pôster de Harry Potter e o Prisioneiro de Azkaban" class="card-poster">
+                        <div class="card-info">
+                            <h3 class="card-title">Harry Potter e o Prisioneiro de Azkaban (2004)</h3>
+                            <p class="card-meta">Tipo: Filme | Gênero: Fantasia, Aventura</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="movie-card">
+                    <a href="detalhes.html" class="card-link">
+                        <img src="c:\Users\SAMSUNG\Downloads\aJZOcorpgloDLkPP6ED0t9sXjNu.webp" alt="Pôster de As branquelas" class="card-poster">
+                        <div class="card-info">
+                            <h3 class="card-title">As Branquelas</h3>
+                            <p class="card-meta">Tipo: Filme | Gênero: Comédia</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="movie-card">
+                    <a href="detalhes.html" class="card-link">
+                        <img src="c:\Users\SAMSUNG\Downloads\6383005-poster.avif" alt="Pôster de A Procura da Felicidade" class="card-poster">
+                        <div class="card-info">
+                            <h3 class="card-title">A Procura da Felicidade</h3>
+                            <p class="card-meta">Tipo: Filme | Gênero: Drama</p>
+                        </div>
+                    </a>
+                </article>
+                
+            </div>
+
+            <div class="pagination">
+                <button class="btn-secondary" disabled>Anterior</button>
+                <span>Página 1 de 10</span>
+                <button class="btn-secondary">Próxima</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Catálogo Interativo. Desenvolvido por Levi Passos, Mayara Lima, Irapuam Junio.</p>
+        </div>
+    </footer>
+</body>
+</html>
