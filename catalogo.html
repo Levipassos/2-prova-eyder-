@@ -15,6 +15,9 @@
                     <li><a href="catalogo.html" class="active">Catálogo</a></li>
                     <li><a href="sobre.html">Sobre a Equipe</a></li>
                 </ul>
+                <button id="theme-toggle" class="theme-toggle" title="Alternar tema">
+                    🌙
+                </button>
             </nav>
         </div>
     </header>
@@ -22,30 +25,54 @@
     <main class="main-content container">
         <section class="filters-section">
             <h2>Filtrar e Buscar</h2>
-            <form class="filter-form">
-                <div class="form-group">
+            <form class="filter-form" id="filter-form">
+                <div class="search-group">
                     <label for="search-input">Buscar Título:</label>
                     <input type="text" id="search-input" placeholder="Ex: Duna, The Office...">
                 </div>
-                <div class="form-group">
-                    <label for="genre-select">Gênero:</label>
-                    <select id="genre-select">
-                        <option value="">Todos os Gêneros</option>
-                        <option value="acao">Ação</option>
-                        <option value="comedia">Comédia</option>
-                        <option value="drama">Drama</option>
-                        <option option="ficcao">Ficção Científica</option>
-                        <option value="fantasia" selected>Fantasia</option>
-                        <option value="terror">Terror</option>
-                    </select>
+                
+                <div class="filter-dropdown">
+                    <button type="button" class="btn-filter-toggle" id="filter-toggle">
+                        <span>🔍 Filtros</span>
+                    </button>
+                    
+                    <div class="filter-modal hidden" id="filter-modal">
+                        <div class="filter-modal-content">
+                            <div class="filter-modal-header">
+                                <h3>Filtrar por</h3>
+                                <button type="button" class="close-filter" id="close-filter">&times;</button>
+                            </div>
+                            
+                            <div class="filter-options">
+                                <div class="form-group">
+                                    <label for="genre-select">Gênero:</label>
+                                    <select id="genre-select">
+                                        <option value="">Todos os Gêneros</option>
+                                        <option value="acao">Ação</option>
+                                        <option value="comedia">Comédia</option>
+                                        <option value="drama">Drama</option>
+                                        <option value="ficcao">Ficção Científica</option>
+                                        <option value="fantasia">Fantasia</option>
+                                        <option value="terror">Terror</option>
+                                        <option value="aventura">Aventura</option>
+                                        <option value="romance">Romance</option>
+                                        <option value="suspense">Suspense</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-actions">
+                                <button type="button" class="btn-secondary" id="clear-filters">Limpar Filtros</button>
+                                <button type="button" class="btn-primary" id="apply-filters">Aplicar Filtros</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn-primary">Aplicar Filtros</button>
             </form>
         </section>
 
         <section class="results-section">
             <div class="loading-spinner-container hidden">
-            
                 <div class="loading-spinner"></div>
                 <p>Carregando títulos...</p>
             </div>
@@ -55,19 +82,18 @@
             </div>
 
             <div class="movie-grid">
-                
                 <article class="movie-card">
                     <a href="detalhes.html" class="card-link">
-                        <img src="c:\Users\SAMSUNG\Downloads\835_grande.jpg" alt="Pôster de Harry Potter e o Prisioneiro de Azkaban" class="card-poster">
+                        <img src="https://portalpopline.com.br/wp-content/uploads/2024/05/harry-potter.webp" alt="Pôster de Harry Potter e o Prisioneiro de Azkaban" class="card-poster">
                         <div class="card-info">
                             <h3 class="card-title">Harry Potter e o Prisioneiro de Azkaban (2004)</h3>
-                            <p class="card-meta">Tipo: Filme | Gênero: Fantasia, Aventura. </p>
+                            <p class="card-meta">Tipo: Filme | Gênero: Fantasia, Aventura</p>
                         </div>
                     </a>
                 </article>
                 <article class="movie-card">
                     <a href="detalhes.html" class="card-link">
-                        <img src="c:\Users\SAMSUNG\Downloads\aJZOcorpgloDLkPP6ED0t9sXjNu.webp" alt="Pôster de As branquelas" class="card-poster">
+                        <img src="https://image.tmdb.org/t/p/original/wz8HwlEvZtpp5bOvVgpTQIUx8Ty.jpg" alt="Pôster de As branquelas" class="card-poster">
                         <div class="card-info">
                             <h3 class="card-title">As Branquelas</h3>
                             <p class="card-meta">Tipo: Filme | Gênero: Comédia</p>
@@ -76,14 +102,13 @@
                 </article>
                 <article class="movie-card">
                     <a href="detalhes.html" class="card-link">
-                        <img src="c:\Users\SAMSUNG\Downloads\6383005-poster.avif" alt="Pôster de A Procura da Felicidade" class="card-poster">
+                        <img src="https://m.media-amazon.com/images/M/MV5BNWQ0Yzc2YTItNWEzOS00MGFmLTgxMjgtNjlhYzBhMDNhNzY0XkEyXkFqcGc@._V1_.jpg" alt="Pôster de A Procura da Felicidade" class="card-poster">
                         <div class="card-info">
                             <h3 class="card-title">A Procura da Felicidade</h3>
                             <p class="card-meta">Tipo: Filme | Gênero: Drama</p>
                         </div>
                     </a>
                 </article>
-                
             </div>
 
             <div class="pagination">
@@ -99,5 +124,58 @@
             <p>&copy; 2025 Catálogo Interativo. Desenvolvido por Levi Passos, Mayara Lima, Irapuam Junio.</p>
         </div>
     </footer>
+
+    <script>
+        // Controle do modal de filtros
+        const filterToggle = document.getElementById('filter-toggle');
+        const filterModal = document.getElementById('filter-modal');
+        const closeFilter = document.getElementById('close-filter');
+        const clearFilters = document.getElementById('clear-filters');
+        const applyFilters = document.getElementById('apply-filters');
+
+        filterToggle.addEventListener('click', function() {
+            filterModal.classList.remove('hidden');
+        });
+
+        closeFilter.addEventListener('click', function() {
+            filterModal.classList.add('hidden');
+        });
+
+        clearFilters.addEventListener('click', function() {
+            document.getElementById('genre-select').value = '';
+        });
+
+        applyFilters.addEventListener('click', function() {
+            filterModal.classList.add('hidden');
+        });
+
+        filterModal.addEventListener('click', function(e) {
+            if (e.target === filterModal) {
+                filterModal.classList.add('hidden');
+            }
+        });
+
+        // Controle do tema claro/escuro
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+        // Aplicar tema salvo
+        if (currentTheme === 'light') {
+            document.body.classList.add('light-theme');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '🌙';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -15,6 +15,9 @@
                     <li><a href="catalogo.html">Catálogo</a></li>
                     <li><a href="sobre.html">Sobre a Equipe</a></li>
                 </ul>
+                <button id="theme-toggle" class="theme-toggle" title="Alternar tema">
+                    🌙
+                </button>
             </nav>
         </div>
     </header>
@@ -35,12 +38,10 @@
             <div class="details-body">
                 <h3>Sinopse</h3>
                 <p class="synopsis">
-                    O terceiro ano de Harry Potter na Escola de Magia e Bruxaria de Hogwarts se aproxima. No entanto, um grande perigo ronda a escola: o notório assassino Sirius Black, um suposto aliado de Lord Voldemort, escapou da prisão de Azkaban e está determinado a encontrar Harry. Enquanto a escola é protegida pelos Dementadores, criaturas que sugam a felicidade, Harry, Ron e Hermione tentam desvendar a verdade por trás da fuga de Black e sua conexão com o passado de Harry. Este ano traz novos mistérios, novas aulas e a descoberta de segredos que mudarão a vida de Harry para sempre.
+                    O terceiro ano de Harry Potter na Escola de Magia e Bruxaria de Hogwarts se aproxima. No entanto, um grande perigo ronda a escola: o notório assassino Sirius Black, um suposto aliado de Lord Voldemort, escapou da prisão de Azkaban e está determinado a encontrar Harry. Enquanto a escola é protegida pelos Dementadores, criaturas que sugam a felicidade, Harry, Ron e Hermione tentam desvendar a verdade por trás da fuga de Black e sua conexão com o pasto de Harry. Este ano traz novos mistérios, novas aulas e a descoberta de segredos que mudarão a vida de Harry para sempre.
                 </p>
                 
-
                 <section class="seasons-section hidden">
-
                     <h3>Temporadas e Episódios</h3>
                     <div class="season-list">
                         <details class="season-item">
@@ -55,7 +56,6 @@
                 </section>
 
                 <div class="missing-data-alert hidden">
-                
                     <p><strong>Aviso:</strong> Sinopse não disponível para este título.</p>
                 </div>
             </div>
@@ -67,5 +67,28 @@
             <p>&copy; 2025 Catálogo Interativo. Desenvolvido por Levi Ribeiro passos, Mayara Miranda lima, Irapuam Junio.</p>
         </div>
     </footer>
+
+    <script>
+        // Controle do tema claro/escuro
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        if (currentTheme === 'light') {
+            document.body.classList.add('light-theme');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '🌙';
+            }
+        });
+    </script>
 </body>
 </html>

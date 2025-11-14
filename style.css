@@ -1,4 +1,3 @@
-
 :root {
     --color-primary: #e50914; 
     --color-secondary: #f4f4f4;
@@ -6,7 +5,25 @@
     --color-light: #ffffff;
     --color-text: #e5e5e5;
     --color-background: #181818;
+    --color-overlay: rgba(0, 0, 0, 0.7);
+    --color-card: #222;
+    --color-border: #444;
     --font-family: 'Arial', sans-serif;
+    
+    /* Transição suave para o tema */
+    transition: all 0.3s ease;
+}
+
+.light-theme {
+    --color-primary: #e50914;
+    --color-secondary: #141414;
+    --color-dark: #f4f4f4;
+    --color-light: #181818;
+    --color-text: #333333;
+    --color-background: #ffffff;
+    --color-overlay: rgba(255, 255, 255, 0.7);
+    --color-card: #f5f5f5;
+    --color-border: #ddd;
 }
 
 * {
@@ -20,11 +37,16 @@ body {
     background-color: var(--color-background);
     color: var(--color-text);
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
     color: var(--color-light);
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 a:hover {
@@ -34,7 +56,6 @@ a:hover {
 ul {
     list-style: none;
 }
-
 
 .container {
     width: 90%;
@@ -47,11 +68,12 @@ ul {
     display: none !important;
 }
 
-
+/* Header */
 .header {
     background-color: var(--color-dark);
     border-bottom: 3px solid var(--color-primary);
     padding: 0.5rem 0;
+    transition: background-color 0.3s ease;
 }
 
 .header .container {
@@ -66,6 +88,12 @@ ul {
     color: var(--color-primary);
 }
 
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .nav-list {
     display: flex;
     gap: 1rem;
@@ -74,18 +102,40 @@ ul {
 .nav-list a {
     padding: 0.5rem 1rem;
     transition: background-color 0.3s;
+    border-radius: 5px;
 }
 
 .nav-list a:hover,
 .nav-list a.active {
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
 }
 
+/* Botão de Tema */
+.theme-toggle {
+    background: none;
+    border: 2px solid var(--color-primary);
+    color: var(--color-text);
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background-color: var(--color-primary);
+    color: var(--color-light);
+}
 
 .main-content {
     padding-top: 2rem;
     padding-bottom: 4rem;
+    flex: 1;
 }
 
 h2 {
@@ -96,11 +146,13 @@ h2 {
     padding-bottom: 0.5rem;
 }
 
+/* Filtros */
 .filters-section {
-    background-color: #222;
+    background-color: var(--color-card);
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 2rem;
+    transition: background-color 0.3s ease;
 }
 
 .filter-form {
@@ -109,22 +161,141 @@ h2 {
     gap: 1rem;
 }
 
-.form-group label {
+.search-group {
+    flex: 1;
+}
+
+.search-group label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
 }
 
-.form-group input[type="text"],
-.form-group select {
+.search-group input[type="text"] {
     width: 100%;
     padding: 0.75rem;
-    border: none;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
-    background-color: #333;
+    background-color: var(--color-background);
     color: var(--color-text);
+    transition: all 0.3s ease;
 }
 
+/* Estilos para o dropdown de filtros */
+.filter-dropdown {
+    position: relative;
+}
+
+.btn-filter-toggle {
+    background-color: var(--color-card);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-filter-toggle:hover {
+    background-color: var(--color-primary);
+    color: var(--color-light);
+}
+
+/* Modal de filtros */
+.filter-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-overlay);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 2rem;
+}
+
+.filter-modal-content {
+    background-color: var(--color-card);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease;
+}
+
+.filter-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.filter-modal-header h3 {
+    color: var(--color-light);
+    font-size: 1.3rem;
+}
+
+.close-filter {
+    background: none;
+    border: none;
+    color: var(--color-text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+}
+
+.close-filter:hover {
+    color: var(--color-primary);
+}
+
+.filter-options {
+    padding: 1.5rem;
+}
+
+.filter-options .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.filter-options .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: all 0.3s ease;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-dark);
+    border-radius: 0 0 8px 8px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-actions button {
+    flex: 1;
+}
 
 .btn-primary,
 .btn-secondary {
@@ -133,7 +304,7 @@ h2 {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
@@ -146,12 +317,14 @@ h2 {
 }
 
 .btn-secondary {
-    background-color: #444;
-    color: var(--color-light);
+    background-color: var(--color-card);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background-color: #666;
+    background-color: var(--color-primary);
+    color: var(--color-light);
 }
 
 .btn-secondary:disabled {
@@ -159,20 +332,21 @@ h2 {
     cursor: not-allowed;
 }
 
-
+/* Cards de filmes */
 .movie-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
 
 .movie-card {
-    background-color: #222;
+    background-color: var(--color-card);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
+    border: 1px solid var(--color-border);
 }
 
 .movie-card:hover {
@@ -188,7 +362,7 @@ h2 {
     width: 100%;
     height: auto;
     display: block;
-    aspect-ratio: 2 / 3; 
+    aspect-ratio: 2 / 3;
     object-fit: cover;
 }
 
@@ -202,6 +376,7 @@ h2 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--color-light);
 }
 
 .card-meta {
@@ -209,7 +384,7 @@ h2 {
     color: #aaa;
 }
 
-
+/* Paginação */
 .pagination {
     display: flex;
     justify-content: center;
@@ -222,11 +397,10 @@ h2 {
     font-size: 1rem;
 }
 
-
+/* Loading e Erros */
 .loading-spinner-container {
     text-align: center;
     padding: 3rem 0;
-    
 }
 
 .loading-spinner {
@@ -253,6 +427,7 @@ h2 {
     margin-top: 1.5rem;
 }
 
+/* Página de Detalhes */
 .details-section {
     padding: 2rem 0;
 }
@@ -309,11 +484,11 @@ h2 {
     text-align: justify;
 }
 
-
 .season-item {
-    background-color: #222;
+    background-color: var(--color-card);
     border-radius: 4px;
     margin-bottom: 0.5rem;
+    border: 1px solid var(--color-border);
 }
 
 .season-item summary {
@@ -325,14 +500,13 @@ h2 {
 
 .episode-list {
     padding: 0.5rem 1rem 1rem 2rem;
-    background-color: #282828;
+    background-color: var(--color-dark);
 }
 
 .episode-list li {
     margin-bottom: 0.25rem;
     font-size: 0.9rem;
 }
-
 
 .missing-data-alert {
     background-color: #333300;
@@ -342,6 +516,7 @@ h2 {
     margin-top: 1.5rem;
 }
 
+/* Página Sobre */
 .about-section {
     padding: 2rem 0;
 }
@@ -354,10 +529,12 @@ h2 {
 }
 
 .member-card {
-    background-color: #222;
+    background-color: var(--color-card);
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
 }
 
 .member-card h3 {
@@ -371,19 +548,18 @@ h2 {
     color: #aaa;
 }
 
-
+/* Footer */
 .footer {
     background-color: var(--color-dark);
     padding: 1rem 0;
     text-align: center;
     font-size: 0.9rem;
     color: #888;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    margin-top: auto;
+    transition: background-color 0.3s ease;
 }
 
-
+/* Responsividade */
 @media (min-width: 768px) {
     .logo a {
         font-size: 2rem;
@@ -394,16 +570,17 @@ h2 {
         align-items: flex-end;
     }
 
-    .form-group {
-        flex: 1;
+    .search-group {
+        flex: 2;
     }
 
-    .filter-form button {
-        flex-shrink: 0;
+    .filter-dropdown {
+        flex: 1;
+        max-width: 200px;
     }
 
     .movie-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 
     .details-header {
@@ -423,7 +600,7 @@ h2 {
     }
 
     .member-card {
-        flex: 1 1 calc(50% - 1.5rem); 
+        flex: 1 1 calc(50% - 1.5rem);
         max-width: 400px;
     }
 }

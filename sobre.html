@@ -15,6 +15,9 @@
                     <li><a href="catalogo.html">Catálogo</a></li>
                     <li><a href="sobre.html" class="active">Sobre a Equipe</a></li>
                 </ul>
+                <button id="theme-toggle" class="theme-toggle" title="Alternar tema">
+                    🌙
+                </button>
             </nav>
         </div>
     </header>
@@ -26,16 +29,16 @@
 
             <div class="team-members">
                 <article class="member-card">
-                    <h3>Levi Ribeiro passos</h3>
+                    <h3>Levi Ribeiro Passos</h3>
                     <p>Função: Desenvolvedor Frontend</p>
                 </article>
                 <article class="member-card">
                     <h3>Irapuam Junio</h3>
                     <p>Função: Desenvolvedor Backend (Simulado)</p>
-                <article> 
-                </article class="member-card">
-                <h3>Mayara Miranda lima</h3>
-                <P>Função: Desenvolvedor Frontend </P>
+                </article>
+                <article class="member-card">
+                    <h3>Mayara Miranda Lima</h3>
+                    <p>Função: Desenvolvedor Frontend</p>
                 </article>
             </div>
         </section>
@@ -43,8 +46,31 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Catálogo Interativo. Desenvolvido por Levi Ribeiro passos, Mayara Miranda lima, Irapuam Junio,  etc.</p>
+            <p>&copy; 2025 Catálogo Interativo. Desenvolvido por Levi Ribeiro Passos, Mayara Miranda Lima, Irapuam Junio.</p>
         </div>
     </footer>
+
+    <script>
+        // Controle do tema claro/escuro
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        if (currentTheme === 'light') {
+            document.body.classList.add('light-theme');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '🌙';
+            }
+        });
+    </script>
 </body>
 </html>
