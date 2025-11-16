@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harry Potter e o Prisioneiro de Azkaban - Catálogo Interativo</title>
+    <title>Detalhes - Catálogo Interativo</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,40 +23,49 @@
     </header>
 
     <main class="main-content container">
-        <section class="details-section">
-            <div class="details-header">
-                <img src="c:\Users\SAMSUNG\Downloads\835_grande.jpg" alt="Pôster de Harry Potter e o Prisioneiro de Azkaban" class="details-poster">
-                <div class="details-info">
-                    <h2 class="details-title">Harry Potter e o Prisioneiro de Azkaban (2004)</h2>
-                    <p class="details-meta">Tipo: Filme | Gênero: Fantasia, Aventura, Mistério | Duração: 2h 22m</p>
-                    <div class="rating">
-                        <span class="rating-value">7.9</span> / 10
-                    </div>
+        <div class="loading-spinner-container">
+            <div class="loading-spinner"></div>
+            <p>Carregando detalhes...</p>
+        </div>
+
+        <div class="error-message hidden">
+            <p>Ocorreu um erro ao carregar os dados. Tente novamente mais tarde.</p>
+        </div>
+
+        <section class="details-section hidden">
+            <div class="details-container">
+                <div class="details-poster-container">
+                    <img src="" alt="" class="details-poster">
                 </div>
-            </div>
-
-            <div class="details-body">
-                <h3>Sinopse</h3>
-                <p class="synopsis">
-                    O terceiro ano de Harry Potter na Escola de Magia e Bruxaria de Hogwarts se aproxima. No entanto, um grande perigo ronda a escola: o notório assassino Sirius Black, um suposto aliado de Lord Voldemort, escapou da prisão de Azkaban e está determinado a encontrar Harry. Enquanto a escola é protegida pelos Dementadores, criaturas que sugam a felicidade, Harry, Ron e Hermione tentam desvendar a verdade por trás da fuga de Black e sua conexão com o pasto de Harry. Este ano traz novos mistérios, novas aulas e a descoberta de segredos que mudarão a vida de Harry para sempre.
-                </p>
                 
-                <section class="seasons-section hidden">
-                    <h3>Temporadas e Episódios</h3>
-                    <div class="season-list">
-                        <details class="season-item">
-                            <summary>Temporada 1 (10 Episódios)</summary>
-                            <ul class="episode-list">
-                                <li><strong>E01:</strong> Nome do Episódio 1</li>
-                                <li><strong>E02:</strong> Nome do Episódio 2</li>
-                                <li><strong>E03:</strong> Nome do Episódio 3</li>
-                            </ul>
-                        </details>
+                <div class="details-content">
+                    <div class="details-header">
+                        <div class="title-rating-row">
+                            <h2 class="details-title"></h2>
+                            <div class="rating">
+                                <span class="rating-value"></span>/10
+                            </div>
+                        </div>
+                        <p class="details-meta"></p>
                     </div>
-                </section>
 
-                <div class="missing-data-alert hidden">
-                    <p><strong>Aviso:</strong> Sinopse não disponível para este título.</p>
+                    <div class="details-body">
+                        <div class="synopsis-section">
+                            <h3>Sinopse</h3>
+                            <div class="synopsis-container">
+                                <p class="synopsis"></p>
+                            </div>
+                        </div>
+
+                        <div class="missing-data-alert hidden">
+                            <p><strong>Aviso:</strong> Sinopse não disponível para este título.</p>
+                        </div>
+
+                        <section class="seasons-section hidden">
+                            <h3>Temporadas e Episódios</h3>
+                            <div class="season-list"></div>
+                        </section>
+                    </div>
                 </div>
             </div>
         </section>
@@ -64,31 +73,11 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Catálogo Interativo. Desenvolvido por Levi Ribeiro passos, Mayara Miranda lima, Irapuam Junio.</p>
+            <p>&copy; 2025 Catálogo Interativo. Desenvolvido por Levi Passos, Mayara Lima, Irapuam Junio.</p>
         </div>
     </footer>
 
-    <script>
-        // Controle do tema claro/escuro
-        const themeToggle = document.getElementById('theme-toggle');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-
-        if (currentTheme === 'light') {
-            document.body.classList.add('light-theme');
-            themeToggle.textContent = '☀️';
-        }
-
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('light-theme');
-            
-            if (document.body.classList.contains('light-theme')) {
-                localStorage.setItem('theme', 'light');
-                themeToggle.textContent = '☀️';
-            } else {
-                localStorage.setItem('theme', 'dark');
-                themeToggle.textContent = '🌙';
-            }
-        });
-    </script>
+    <script type="module" src="js/config.js"></script>
+    <script type="module" src="js/detalhes.js"></script>
 </body>
 </html>

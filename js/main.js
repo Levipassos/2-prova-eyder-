@@ -1,18 +1,37 @@
 import { CONFIG } from './config.js';
 import { state } from './state.js';
-import { fetchAllSearchResults, fetchNormalMovies, fetchGenres } from './api.js';
-import { toggleLoading, showError, hideError, displayMovies, updatePagination, populateGenres } from './dom.js';
+import { 
+    fetchAllSearchResults, 
+    fetchNormalMovies, 
+    fetchGenres,
+    fetchAllSeriesSearchResults,
+    fetchNormalSeries,
+    fetchSeriesGenres
+} from './api.js';
+import { 
+    toggleLoading, 
+    showError, 
+    hideError, 
+    displayMixedContent,
+    updatePagination, 
+    populateGenres,
+    populateSeriesGenres 
+} from './dom.js';
 
 async function loadGenres() {
     try {
-        const genres = await fetchGenres();
-        populateGenres(genres);
+        const [movieGenres, seriesGenres] = await Promise.all([
+            fetchGenres(),
+            fetchSeriesGenres()
+        ]);
+        populateGenres(movieGenres);
+        populateSeriesGenres(seriesGenres);
     } catch (error) {
         console.error('Erro ao carregar gêneros:', error);
     }
 }
 
-async function fetchMovies() {
+async function fetchContent() {
     if (state.isLoading) return;
     
     state.isLoading = true;
@@ -21,40 +40,73 @@ async function fetchMovies() {
 
     try {
         let moviesToDisplay = [];
+        let seriesToDisplay = [];
         let totalPages = 1;
 
         if (state.searchQuery && state.isSearchMode) {
             const startIndex = (state.currentPage - 1) * CONFIG.MOVIES_PER_PAGE;
             const endIndex = startIndex + CONFIG.MOVIES_PER_PAGE;
-            moviesToDisplay = state.allSearchResults.slice(startIndex, endIndex);
-            totalPages = Math.ceil(state.allSearchResults.length / CONFIG.MOVIES_PER_PAGE);
+            
+            let allResults = [...state.allSearchResults, ...state.allSeriesSearchResults];
+            
+            if (state.currentType) {
+                allResults = allResults.filter(item => item.type === state.currentType);
+            }
+            
+            const paginatedResults = allResults.slice(startIndex, endIndex);
+            moviesToDisplay = paginatedResults.filter(item => item.type === 'movie');
+            seriesToDisplay = paginatedResults.filter(item => item.type === 'series');
+            totalPages = Math.ceil(allResults.length / CONFIG.MOVIES_PER_PAGE);
             
         } else if (state.searchQuery) {
-            state.allSearchResults = await fetchAllSearchResults(state.searchQuery);
-            state.totalSearchResults = state.allSearchResults.length;
+            const [movies, series] = await Promise.all([
+                fetchAllSearchResults(state.searchQuery),
+                fetchAllSeriesSearchResults(state.searchQuery)
+            ]);
+            
+            state.allSearchResults = movies.map(movie => ({...movie, type: 'movie'}));
+            state.allSeriesSearchResults = series.map(seriesItem => ({...seriesItem, type: 'series'}));
+            
+            let allResults = [...state.allSearchResults, ...state.allSeriesSearchResults];
+            
+            if (state.currentType) {
+                allResults = allResults.filter(item => item.type === state.currentType);
+            }
+            
+            state.totalSearchResults = allResults.length;
             state.isSearchMode = true;
             state.currentPage = 1;
             
-            if (state.allSearchResults.length === 0) {
-                showError(`Nenhum filme de ${CONFIG.CURRENT_YEAR} encontrado para "${state.searchQuery}"`);
+            if (state.totalSearchResults === 0) {
+                showError(`Nenhum conteúdo de ${CONFIG.CURRENT_YEAR} encontrado para "${state.searchQuery}"`);
             }
             
-            moviesToDisplay = state.allSearchResults.slice(0, CONFIG.MOVIES_PER_PAGE);
-            totalPages = Math.ceil(state.allSearchResults.length / CONFIG.MOVIES_PER_PAGE);
+            const paginatedResults = allResults.slice(0, CONFIG.MOVIES_PER_PAGE);
+            moviesToDisplay = paginatedResults.filter(item => item.type === 'movie');
+            seriesToDisplay = paginatedResults.filter(item => item.type === 'series');
+            totalPages = Math.ceil(allResults.length / CONFIG.MOVIES_PER_PAGE);
             
         } else {
             state.isSearchMode = false;
             state.allSearchResults = [];
+            state.allSeriesSearchResults = [];
             
-            moviesToDisplay = await fetchNormalMovies(state.currentPage, state.currentGenre);
+            if (state.currentType === 'movie' || state.currentType === '') {
+                moviesToDisplay = await fetchNormalMovies(state.currentPage, state.currentGenre);
+            }
+            
+            if (state.currentType === 'series' || state.currentType === '') {
+                seriesToDisplay = await fetchNormalSeries(state.currentPage, state.currentGenre);
+            }
+            
             totalPages = 10;
 
-            if (moviesToDisplay.length === 0) {
-                showError(`Nenhum filme de ${CONFIG.CURRENT_YEAR} encontrado`);
+            if (moviesToDisplay.length === 0 && seriesToDisplay.length === 0) {
+                showError(`Nenhum conteúdo de ${CONFIG.CURRENT_YEAR} encontrado`);
             }
         }
 
-        displayMovies(moviesToDisplay);
+        displayMixedContent(moviesToDisplay, seriesToDisplay);
         updatePagination(state.currentPage, totalPages);
         
     } catch (error) {
@@ -76,13 +128,14 @@ function setupEventListeners() {
                 state.searchQuery = query;
                 state.currentPage = 1;
                 state.isSearchMode = false;
-                fetchMovies();
+                fetchContent();
             } else {
                 state.searchQuery = '';
                 state.isSearchMode = false;
                 state.allSearchResults = [];
+                state.allSeriesSearchResults = [];
                 state.currentPage = 1;
-                fetchMovies();
+                fetchContent();
             }
         }
     });
@@ -90,34 +143,39 @@ function setupEventListeners() {
     document.querySelector('.pagination button:first-child').addEventListener('click', () => {
         if (state.currentPage > 1) {
             state.currentPage--;
-            fetchMovies();
+            fetchContent();
         }
     });
 
     document.querySelector('.pagination button:last-child').addEventListener('click', () => {
         state.currentPage++;
-        fetchMovies();
+        fetchContent();
     });
 
     document.getElementById('apply-filters').addEventListener('click', () => {
         state.currentGenre = document.getElementById('genre-select').value;
+        state.currentType = document.getElementById('type-select').value;
         state.searchQuery = '';
         state.isSearchMode = false;
         state.allSearchResults = [];
+        state.allSeriesSearchResults = [];
         state.currentPage = 1;
-        fetchMovies();
+        fetchContent();
         document.getElementById('filter-modal').classList.add('hidden');
     });
 
     document.getElementById('clear-filters').addEventListener('click', () => {
         document.getElementById('genre-select').value = '';
+        document.getElementById('type-select').value = '';
         document.getElementById('search-input').value = '';
         state.currentGenre = '';
+        state.currentType = '';
         state.searchQuery = '';
         state.isSearchMode = false;
         state.allSearchResults = [];
+        state.allSeriesSearchResults = [];
         state.currentPage = 1;
-        fetchMovies();
+        fetchContent();
         document.getElementById('filter-modal').classList.add('hidden');
     });
 
@@ -138,7 +196,7 @@ function setupEventListeners() {
 
 async function init() {
     await loadGenres();
-    await fetchMovies();
+    await fetchContent();
     setupEventListeners();
 }
 

@@ -2,11 +2,19 @@ import { CONFIG } from './config.js';
 
 function filterMoviesByYear(movies) {
     if (!movies || !Array.isArray(movies)) return [];
-    
     return movies.filter(movie => {
         if (!movie.release_date) return false;
         const movieYear = new Date(movie.release_date).getFullYear();
         return movieYear === CONFIG.CURRENT_YEAR;
+    });
+}
+
+function filterSeriesByYear(series) {
+    if (!series || !Array.isArray(series)) return [];
+    return series.filter(series => {
+        if (!series.first_air_date) return false;
+        const seriesYear = new Date(series.first_air_date).getFullYear();
+        return seriesYear === CONFIG.CURRENT_YEAR;
     });
 }
 
@@ -19,9 +27,7 @@ export async function fetchAllSearchResults(query) {
         const firstResponse = await fetch(firstPageUrl);
         const firstData = await firstResponse.json();
         
-        if (!firstData.results || firstData.results.length === 0) {
-            return [];
-        }
+        if (!firstData.results || firstData.results.length === 0) return [];
 
         totalPages = Math.min(firstData.total_pages, 3);
         allResults = [...filterMoviesByYear(firstData.results)];
@@ -48,41 +54,100 @@ export async function fetchAllSearchResults(query) {
     }
 }
 
+export async function fetchAllSeriesSearchResults(query) {
+    let allResults = [];
+    let totalPages = 1;
+
+    try {
+        const firstPageUrl = `${CONFIG.SERIES_SEARCH_URL}?api_key=${CONFIG.API_KEY}&language=pt-BR&query=${encodeURIComponent(query)}&page=1&first_air_date_year=${CONFIG.CURRENT_YEAR}`;
+        const firstResponse = await fetch(firstPageUrl);
+        const firstData = await firstResponse.json();
+        
+        if (!firstData.results || firstData.results.length === 0) return [];
+
+        totalPages = Math.min(firstData.total_pages, 3);
+        allResults = [...filterSeriesByYear(firstData.results)];
+
+        const pagePromises = [];
+        for (let page = 2; page <= totalPages; page++) {
+            const pageUrl = `${CONFIG.SERIES_SEARCH_URL}?api_key=${CONFIG.API_KEY}&language=pt-BR&query=${encodeURIComponent(query)}&page=${page}&first_air_date_year=${CONFIG.CURRENT_YEAR}`;
+            pagePromises.push(
+                fetch(pageUrl)
+                    .then(r => r.json())
+                    .then(pageData => pageData.results ? filterSeriesByYear(pageData.results) : [])
+            );
+        }
+
+        const pagesData = await Promise.all(pagePromises);
+        pagesData.forEach(filteredPageResults => {
+            allResults = [...allResults, ...filteredPageResults];
+        });
+
+        return allResults;
+    } catch (error) {
+        console.error('Erro ao buscar séries:', error);
+        return allResults;
+    }
+}
+
 export async function fetchNormalMovies(page, genre) {
     let url = `${CONFIG.BASE_URL}/discover/movie?api_key=${CONFIG.API_KEY}&language=pt-BR&sort_by=popularity.desc&page=${page}&primary_release_year=${CONFIG.CURRENT_YEAR}`;
     
-    if (genre) {
-        url += `&with_genres=${genre}`;
-    }
+    if (genre) url += `&with_genres=${genre}`;
 
     const response = await fetch(url);
-    
-    if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
     
     const data = await response.json();
-    
-    if (!data.results) {
-        throw new Error('Resposta sem resultados');
-    }
+    if (!data.results) throw new Error('Resposta sem resultados');
 
     return filterMoviesByYear(data.results);
+}
+
+export async function fetchNormalSeries(page, genre) {
+    let url = `${CONFIG.SERIES_DISCOVER_URL}?api_key=${CONFIG.API_KEY}&language=pt-BR&sort_by=popularity.desc&page=${page}&first_air_date_year=${CONFIG.CURRENT_YEAR}`;
+    
+    if (genre) url += `&with_genres=${genre}`;
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+    
+    const data = await response.json();
+    if (!data.results) throw new Error('Resposta sem resultados');
+
+    return filterSeriesByYear(data.results);
+}
+
+export async function fetchSeriesDetails(seriesId) {
+    const url = `${CONFIG.BASE_URL}/tv/${seriesId}?api_key=${CONFIG.API_KEY}&language=pt-BR`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Série não encontrada');
+    return await response.json();
+}
+
+export async function fetchSeasonDetails(seriesId, seasonNumber) {
+    const url = `${CONFIG.BASE_URL}/tv/${seriesId}/season/${seasonNumber}?api_key=${CONFIG.API_KEY}&language=pt-BR`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Temporada ${seasonNumber} não encontrada`);
+    return await response.json();
 }
 
 export async function fetchGenres() {
     const url = `${CONFIG.BASE_URL}/genre/movie/list?api_key=${CONFIG.API_KEY}&language=pt-BR`;
     const response = await fetch(url);
-    
-    if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
     
     const data = await response.json();
+    if (!data.genres) throw new Error('Resposta sem dados de gêneros');
+    return data.genres;
+}
+
+export async function fetchSeriesGenres() {
+    const url = `${CONFIG.BASE_URL}/genre/tv/list?api_key=${CONFIG.API_KEY}&language=pt-BR`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
     
-    if (!data.genres) {
-        throw new Error('Resposta sem dados de gêneros');
-    }
-    
+    const data = await response.json();
+    if (!data.genres) throw new Error('Resposta sem dados de gêneros');
     return data.genres;
 }

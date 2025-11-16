@@ -27,7 +27,7 @@
             <h2>Filtrar e Buscar</h2>
             <form class="filter-form" id="filter-form" onsubmit="return false;">
                 <div class="search-group">
-                    <label for="search-input">Buscar Título:</label>
+                    <label for="search-input"></label>
                     <input type="text" id="search-input" placeholder="Ex: Duna, The Office... Pressione Enter para buscar" 
                     onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }">
                 </div>
@@ -58,6 +58,14 @@
                                         <option value="romance">Romance</option>
                                         <option value="suspense">Suspense</option>
                                     </select>
+                                    <div class="form-group">
+                                        <label for="type-select">Tipo de Mídia:</label>
+                                        <select id="type-select">
+                                            <option value="">Todos os Tipos</option>
+                                            <option value="movie">Filmes</option>
+                                            <option value="series">Séries</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             
