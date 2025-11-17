@@ -639,122 +639,7 @@ ul {
     text-align: center;
 }
 
-/* Estilos para temporadas e episódios */
-.seasons-section {
-    margin-top: 2rem;
-}
 
-.seasons-section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--color-light);
-    border-bottom: 2px solid var(--color-primary);
-    padding-bottom: 0.5rem;
-}
-
-.season-item {
-    background-color: var(--color-card);
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    border: 1px solid var(--color-border);
-    overflow: hidden;
-}
-
-.season-item summary {
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    font-weight: bold;
-    outline: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.3s;
-}
-
-.season-item summary:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.season-meta {
-    font-size: 0.9rem;
-    color: #aaa;
-    font-weight: normal;
-}
-
-.episode-list {
-    padding: 1rem 1.5rem;
-    background-color: var(--color-dark);
-    border-top: 1px solid var(--color-border);
-}
-
-.episode-item {
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.episode-item:last-child {
-    border-bottom: none;
-}
-
-.episode-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.episode-number {
-    font-weight: bold;
-    color: var(--color-primary);
-    min-width: 60px;
-}
-
-.episode-title {
-    flex: 1;
-    font-weight: bold;
-    margin: 0 1rem;
-}
-
-.episode-rating {
-    color: #ffd700;
-    font-size: 0.9rem;
-}
-
-.episode-synopsis {
-    font-size: 0.9rem;
-    color: #ccc;
-    line-height: 1.5;
-    margin: 0;
-    padding-left: 60px;
-}
-
-/* Melhorar a responsividade */
-@media (max-width: 768px) {
-    .episode-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-    }
-    
-    .episode-title {
-        margin: 0;
-        order: 3;
-        width: 100%;
-    }
-    
-    .episode-synopsis {
-        padding-left: 0;
-        margin-top: 0.5rem;
-    }
-    
-    .season-item summary {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-}
 
 /* Layout para desktop */
 @media (min-width: 768px) {
@@ -817,4 +702,149 @@ ul {
 
 .details-poster:hover {
     transform: scale(1.02);
+}
+
+/* Estilos para a seção de créditos da API */
+.api-credits {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--color-card) 0%, var(--color-dark) 100%);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+}
+
+.api-credits h3 {
+    color: var(--color-light);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.api-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.api-logo {
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.api-logo img {
+    filter: brightness(0) invert(1);
+    max-width: 200px;
+    height: auto;
+}
+
+.api-details {
+    flex: 1;
+}
+
+.api-details p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.api-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-api {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-primary);
+}
+
+.btn-api:hover {
+    background-color: transparent;
+    color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+/* Estilos para a seção de tecnologias */
+.tech-stack {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--color-card);
+    border-radius: 8px;
+}
+
+.tech-stack h3 {
+    color: var(--color-light);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.tech-item {
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* Estilo para o crédito no footer */
+.footer-credit {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.footer-credit a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.footer-credit a:hover {
+    text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+    .api-info {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .api-logo {
+        flex: 0 0 200px;
+    }
+    
+    .api-links {
+        justify-content: flex-start;
+    }
+}
+
+.light-theme .api-logo img {
+    filter: none;
+}
+
+.light-theme .api-credits {
+    background: linear-gradient(135deg, var(--color-card) 0%, #e0e0e0 100%);
+}
+
+.light-theme .tech-item {
+    background-color: var(--color-primary);
 }
